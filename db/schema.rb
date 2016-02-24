@@ -11,27 +11,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150922194944) do
+ActiveRecord::Schema.define(version: 20160225134420) do
+
+  create_table "calls", force: :cascade do |t|
+    t.string   "direction",           limit: 255
+    t.string   "from",                limit: 255
+    t.string   "caller_name",         limit: 255
+    t.string   "to",                  limit: 255
+    t.string   "status",              limit: 255
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "uuid",                limit: 255
+    t.integer  "answering_number_id", limit: 4
+    t.string   "voicemail_url",       limit: 255
+  end
+
+  add_index "calls", ["answering_number_id"], name: "index_calls_on_answering_number_id", using: :btree
+  add_index "calls", ["uuid"], name: "index_calls_on_uuid", unique: true, using: :btree
 
   create_table "company_numbers", force: :cascade do |t|
-    t.string   "sip_endpoint"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.string   "sip_endpoint", limit: 255
+    t.string   "name",         limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
+
+  add_index "company_numbers", ["sip_endpoint"], name: "index_company_numbers_on_sip_endpoint", unique: true, using: :btree
 
   create_table "user_numbers", force: :cascade do |t|
-    t.integer  "user_id"
-    t.string   "sip_endpoint"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.integer  "user_id",      limit: 4
+    t.string   "sip_endpoint", limit: 255
+    t.string   "name",         limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
-  add_index "user_numbers", ["user_id"], name: "index_user_numbers_on_user_id"
+  add_index "user_numbers", ["sip_endpoint"], name: "index_user_numbers_on_sip_endpoint", unique: true, using: :btree
+  add_index "user_numbers", ["user_id"], name: "index_user_numbers_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
 end
